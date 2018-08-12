@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 import modelo.Solicitud;
+import modelo.TMSolicitud;
 
 public class App extends javax.swing.JFrame {
 
@@ -15,6 +16,7 @@ public class App extends javax.swing.JFrame {
         lista = new ArrayList<>();
         setTitle("Supermercado System v0.1");
         setLocationRelativeTo(null);
+        cargarSolicitudes();
     }
 
     @SuppressWarnings("unchecked")
@@ -32,6 +34,8 @@ public class App extends javax.swing.JFrame {
         txtMarca = new javax.swing.JTextField();
         txtNombreCliente = new javax.swing.JTextField();
         lblCantidad = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblSolicitudes = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -93,7 +97,23 @@ public class App extends javax.swing.JFrame {
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
+        lblCantidad.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        lblCantidad.setForeground(new java.awt.Color(255, 0, 0));
+        lblCantidad.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblCantidad.setText("Solicitudes: 0");
+
+        tblSolicitudes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(tblSolicitudes);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -101,68 +121,91 @@ public class App extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRegistrar)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnRegistrar)
-                    .addComponent(lblCantidad))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(lblCantidad)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarActionPerformed
-        // 1.- Rescatar los datos que el usuario escribió
-        // 2.- Almacenar esos datos en un objeto --> Clase --> Solicitud
+        if (txtNombreProducto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe colocar algún nombre del producto");
+            txtNombreProducto.setText(null);
+            txtNombreProducto.requestFocus();
+        } else if (txtMarca.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe colocar alguna marca");
+            txtMarca.setText(null);
+            txtMarca.requestFocus();
+        } else if (txtNombreCliente.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe colocar algún nombre del cliente");
+            txtNombreCliente.setText(null);
+            txtNombreCliente.requestFocus();
+        } else if (txtFonoCliente.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debe colocar algún fono");
+            txtFonoCliente.setText(null);
+            txtFonoCliente.requestFocus();
+        } else {
+            // todos los datos están ok!
+            // 1.- Rescatar los datos que el usuario escribió
+            // 2.- Almacenar esos datos en un objeto --> Clase --> Solicitud
 
-        Solicitud soli = new Solicitud();
+            Solicitud soli = new Solicitud();
 
-        soli.fono = txtFonoCliente.getText();
-        soli.marcaProducto = txtMarca.getText();
-        soli.nombreCliente = txtNombreCliente.getText();
-        soli.nombreProducto = txtNombreProducto.getText();
+            soli.setFono(txtFonoCliente.getText());
+            soli.setMarcaProducto(txtMarca.getText());
+            soli.setNombreCliente(txtNombreCliente.getText());
+            soli.setNombreProducto(txtNombreProducto.getText());
 
-        // 3.- Almacenar ese objeto en una lista
-        lista.add(soli);
+            // 3.- Almacenar ese objeto en una lista
+            lista.add(soli);
 
-        // 4.- Borrar lo que el usuario escribió en los componentes gráficos (JTextField)
-        txtFonoCliente.setText(null);
-        txtMarca.setText(null);
-        txtNombreCliente.setText(null);
-        txtNombreProducto.setText(null);
+            // 4.- Borrar lo que el usuario escribió en los componentes gráficos (JTextField)
+            txtFonoCliente.setText(null);
+            txtMarca.setText(null);
+            txtNombreCliente.setText(null);
+            txtNombreProducto.setText(null);
 
-        txtNombreProducto.requestFocus();
+            txtNombreProducto.requestFocus();
 
-        
+            System.out.println("---------------------------------------------");
+            System.out.println("Listado de las solicitudes");
+            System.out.println("---------------------------------------------");
 
-        System.out.println("---------------------------------------------");
-        System.out.println("Listado de las solicitudes");
-        System.out.println("---------------------------------------------");
+            for (Solicitud s : lista) {
+                System.out.println(s.getNombreProducto() + " - " + s.getMarcaProducto() + " - "
+                        + s.getNombreCliente() + " - " + s.getFono());
+            }
 
-        for (Solicitud s : lista) {
-            System.out.println(s.nombreProducto + " - " + s.marcaProducto + " - " + s.nombreCliente + " - " + s.fono);
+            System.out.println("---------------------------------------------");
+
+            lblCantidad.setText("Solicitudes: " + lista.size());
+
+            cargarSolicitudes();
+
+            // 5.- Mensaje de información 
+            JOptionPane.showMessageDialog(this, "Solicitud creada!");
         }
-
-        System.out.println("---------------------------------------------");
-        
-        lblCantidad.setText("Solicitudes: "+lista.size());
-        
-        
-        // 5.- Mensaje de información 
-        JOptionPane.showMessageDialog(this, "Solicitud creada!");
     }//GEN-LAST:event_btnRegistrarActionPerformed
 
     public static void main(String args[]) {
@@ -174,6 +217,12 @@ public class App extends javax.swing.JFrame {
         });
     }
 
+    private void cargarSolicitudes() {
+        TMSolicitud model = new TMSolicitud(lista);
+
+        tblSolicitudes.setModel(model);
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegistrar;
     private javax.swing.JLabel jLabel1;
@@ -181,7 +230,9 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCantidad;
+    private javax.swing.JTable tblSolicitudes;
     private javax.swing.JTextField txtFonoCliente;
     private javax.swing.JTextField txtMarca;
     private javax.swing.JTextField txtNombreCliente;
